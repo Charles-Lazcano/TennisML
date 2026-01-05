@@ -14,7 +14,7 @@ model behavior, and analyze prediction error patterns before transitioning to mo
 training scripts and an application interface.
 
 A snapshot from the exploratory notebook is shown below.
-![Exploratory Notebook Example](docs/notebook_example.png)
+
 ![Exploratory Notebook Example](docs/notebook_example2.png)
 
 
