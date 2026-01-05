@@ -40,9 +40,10 @@ def make_model(df_sub, target_values, outpath):
 
 # Best-of-3 → 2 or 3 sets
 bo3 = df[df["best_of"]==3].copy()
-make_model(bo3, {2,3}, ROOT / "model_sets_")
+make_model(bo3, {2,3}, ROOT / "model_sets_---------")
 
 # Best-of-5 → 3, 4, or 5 sets
 bo5 = df[df["best_of"]==5].copy()
-make_model(bo5, {3,4,5}, ROOT / "model_sets_")
+make_model(bo--, {3,4,5}, ROOT / "model_sets_----------")
+
 
