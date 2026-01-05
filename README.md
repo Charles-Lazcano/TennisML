@@ -16,6 +16,8 @@ training scripts and an application interface.
 A snapshot from the exploratory notebook is shown below.
 
 ![Exploratory Notebook Example](docs/notebook_example2.png)
+![Exploratory Notebook Example](docs/notebook_example.png)
+
 
 
 ## Motivation
