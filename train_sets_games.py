@@ -37,12 +37,12 @@ def make_model(df_sub, target_values, outpath):
     clf.fit(Xtr, ytr)
     acc = accuracy_score(yte, clf.predict(Xte))
     print(f"Saved {outpath.name} • classes {sorted(target_values)} • acc={acc:.3f}")
-    joblib.dump(clf, outpath)
 
 # Best-of-3 → 2 or 3 sets
 bo3 = df[df["best_of"]==3].copy()
-make_model(bo3, {2,3}, ROOT / "model_sets_bo3.joblib")
+make_model(bo3, {2,3}, ROOT / "model_sets_")
 
 # Best-of-5 → 3, 4, or 5 sets
 bo5 = df[df["best_of"]==5].copy()
-make_model(bo5, {3,4,5}, ROOT / "model_sets_bo5.joblib")
+make_model(bo5, {3,4,5}, ROOT / "model_sets_")
+
