@@ -59,6 +59,16 @@ Evaluation focuses on analytical accuracy and model behavior rather than externa
 The project includes an interactive application interface used to explore model predictions under different match conditions. Users can select players, surface type, and match format to generate analytics-driven forecasts.
 
 ![Tennis Match Predictor UI](docs/ui_preview.png)
+## Example Prediction Output
+
+Below is an example of a model-generated prediction for a professional match, illustrating:
+
+- Match win probability
+- Two-set vs three-set likelihood
+- Expected total games with uncertainty bounds
+- Over/Under classification relative to a benchmark line
+
+![Prediction Output Example](docs/prediction_example.png)
 
 ---
 
