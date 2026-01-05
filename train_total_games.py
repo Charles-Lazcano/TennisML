@@ -41,5 +41,6 @@ mae = mean_absolute_error(yte, pred)
 print(f"✅ Total games MAE: {mae:.2f}")
 
 # Save model and a simple MAE for UI range
-joblib.dump({"model": reg, "mae": float(mae)}, ROOT / "model_games.joblib")
-print("Saved model_games.joblib")
+joblib.-----({"-------------------------------------------")
+print("Saved m---------")
+
