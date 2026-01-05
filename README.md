@@ -16,10 +16,10 @@ Match length in tennis is influenced by surface, player skill balance, and histo
 This project leverages publicly available professional tennis datasets, including:
 
 - **Jeff Sackmann’s Tennis Data**  
-  A comprehensive historical dataset of ATP match results, rankings, and metadata used for feature engineering and long-term trend analysis.
+  Historical ATP match results, rankings, and metadata used for feature engineering and long-term trend analysis.
 
 - **TML (Tennis Match Log) Database**  
-  A structured match-level dataset providing detailed match records that complement historical ATP data and support model training and evaluation.
+  Match-level datasets providing structured records that complement historical ATP data and support model training and evaluation.
 
 Raw datasets and derived training tables are handled locally and are intentionally excluded from version control.
 
@@ -39,7 +39,7 @@ Feature definitions and model inputs are modularized to support iterative experi
 ## Modeling Architecture
 The project uses ensemble-based machine learning models for different prediction tasks:
 - **Total games estimation**
-- **Match length classification (2 vs three sets)**
+- **Match length classification (two sets vs three sets)**
 
 Separate training pipelines are used for match length and total games modeling, allowing independent evaluation and refinement.
 
@@ -52,6 +52,13 @@ Predictions are logged and evaluated after match completion to measure:
 - Model consistency across confidence levels
 
 Evaluation focuses on analytical accuracy and model behavior rather than external outcomes.
+
+---
+
+## Application Interface
+The project includes an interactive application interface used to explore model predictions under different match conditions. Users can select players, surface type, and match format to generate analytics-driven forecasts.
+
+![Tennis Match Predictor UI](docs/ui_preview.png)
 
 ---
 
