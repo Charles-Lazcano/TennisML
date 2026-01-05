@@ -6,6 +6,15 @@ This project is a Python-based analytics system designed to model and evaluate t
 The project emphasizes reproducible modeling, structured evaluation, and deterministic decision logic, treating external benchmarks as reference points for post-event analysis rather than optimization targets.
 
 ---
+## Exploratory Analysis
+
+The project began with an exploratory data analysis and model validation phase conducted
+in a Jupyter notebook. This phase was used to investigate feature relevance, evaluate
+model behavior, and analyze prediction error patterns before transitioning to modular
+training scripts and an application interface.
+
+A snapshot from the exploratory notebook is shown below.
+
 
 ## Motivation
 Match length in tennis is influenced by surface, player skill balance, and historical performance patterns. This project explores how machine learning models can capture those relationships and produce stable, interpretable forecasts for match length metrics.
