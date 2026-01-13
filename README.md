@@ -5,6 +5,9 @@ This project is a Python-based analytics system designed to model and evaluate t
 
 The project emphasizes reproducible modeling, structured evaluation, and deterministic decision logic, treating external benchmarks as reference points for post-event analysis rather than optimization targets.
 
+**Development Note:**  
+ChatGPT was used as a supplementary tool to assist with brainstorming, code structuring, documentation drafting, and iterative refinement during development. All modeling decisions, data handling, and evaluation logic were designed and validated by the author.
+
 ---
 ## Exploratory Analysis
 
@@ -17,8 +20,6 @@ A snapshot from the exploratory notebook is shown below.
 
 ![Exploratory Notebook Example](docs/notebook_example2.png)
 ![Exploratory Notebook Example](docs/notebook_example.png)
-
-
 
 ## Motivation
 Match length in tennis is influenced by surface, player skill balance, and historical performance patterns. This project explores how machine learning models can capture those relationships and produce stable, interpretable forecasts for match length metrics.
@@ -72,6 +73,7 @@ Evaluation focuses on analytical accuracy and model behavior rather than externa
 The project includes an interactive application interface used to explore model predictions under different match conditions. Users can select players, surface type, and match format to generate analytics-driven forecasts.
 
 ![Tennis Match Predictor UI](docs/ui_preview.png)
+
 ## Example Prediction Output
 
 Below is an example of a model-generated prediction for a professional match, illustrating:
