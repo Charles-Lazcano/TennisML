@@ -96,4 +96,4 @@ Below is an example of a model-generated prediction for a professional match, il
 ---
 
 ## Disclaimer
-This repository is intended for educational and analytical purposes and demonstrates applied machine learning techniques in a sports analytics context.
+This repository is intended for educational and analytical purposes and demonstrates applied machine learning techniques in a sports analytics context.Tennis databases, files, and algorithms by Jeff Sackmann / Tennis Abstract 
