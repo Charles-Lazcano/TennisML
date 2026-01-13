@@ -6,7 +6,7 @@ This project is a Python-based analytics system designed to model and evaluate t
 The project emphasizes reproducible modeling, structured evaluation, and deterministic decision logic, treating external benchmarks as reference points for post-event analysis rather than optimization targets.
 
 **Development Note:**  
-ChatGPT was used as a supplementary tool to assist with brainstorming, code structuring, documentation drafting, and iterative refinement during development. All modeling decisions, data handling, and evaluation logic were designed and validated by the author.
+ChatGPT was used as a supplementary tool to assist with brainstorming, code structuring, documentation drafting, and iterative refinement during development. All modeling decisions, data handling, and evaluation logic were designed and validated by me(Charles).
 
 ---
 ## Exploratory Analysis
