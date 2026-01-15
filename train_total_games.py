@@ -38,9 +38,10 @@ Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.25, random_state=42)
 reg.fit(Xtr, ytr)
 pred = reg.predict(Xte)
 mae = mean_absolute_error(yte, pred)
-print(f"✅ Total games MAE: {mae:.2f}")
+print(f" Total games MAE: {mae:.2f}")
 
 # Save model and a simple MAE for UI range
 joblib.-----({"-------------------------------------------")
 print("Saved m---------")
+
 
