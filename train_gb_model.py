@@ -7,7 +7,7 @@
 #   - model_games.joblib              (total games regressor, if total_games exists)
 #   - feature_columns_games_gb.csv    (features for games model)
 #
-# We create labels by mirroring each match:
+#     create labels by mirroring each match:
 #   - row 1: winner vs loser  (y = 1)
 #   - row 2: loser vs winner  (y = 0, with diff features sign-flipped)
 
@@ -18,12 +18,12 @@ from sklearn.ensemble import HistGradientBoostingClassifier, HistGradientBoostin
 from sklearn.metrics import accuracy_score, roc_auc_score, mean_absolute_error
 import joblib
 
-# 1. Load base data -----------------------------------------------------------
+# 1. Load base data 
 df_raw = pd.read_csv("matches_with_elo.csv")
 print(f"Loaded matches_with_elo.csv with shape {df_raw.shape}")
 print("Columns:", list(df_raw.columns))
 
-# Try to detect a date column for time-based splitting later
+# To detect a date column for time-based splitting later
 date_col = None
 for cand in ["tourney_date", "date", "match_date", "event_date"]:
     if cand in df_raw.columns:
@@ -39,7 +39,7 @@ if date_col is not None:
 else:
     print("No obvious date column found; will use random train/test split.")
 
-# 2. Load feature columns used by the old logistic model ---------------------
+# 2. Load feature columns used by the old logistic model
 try:
     feature_cols = (
         pd.read_csv("feature_columns.csv", header=None, dtype=str)
@@ -57,14 +57,14 @@ except FileNotFoundError:
         "You should have this from your previous logistic model training."
     )
 
-# Sanity check that all base feature columns exist in the CSV
+# Checking all base feature columns exist in the CSV
 missing = [c for c in feature_cols if c not in df_raw.columns]
 if missing:
     raise ValueError(
         f"The following feature columns are missing in matches_with_elo.csv: {missing}"
     )
 
-# 3. Build a mirrored dataset with labels ------------------------------------
+# 3. Build a mirrored dataset with labels 
 # Positive rows: "Player A = actual winner" (y = 1)
 df_pos = df_raw.copy()
 df_pos["y"] = 1
@@ -85,7 +85,7 @@ df = pd.concat([df_pos, df_neg], ignore_index=True)
 print(f"Combined mirrored dataset shape: {df.shape}")
 print("Class balance:", df["y"].value_counts().to_dict())
 
-# 4. Add engineered features (help both winner + total games) ----------------
+# 4. features (help both winner + total games) 
 extra_features = []
 
 if "elo_diff" in df.columns:
@@ -102,7 +102,7 @@ if "rank_diff" in df.columns:
     df["rank_diff_abs"] = df["rank_diff"].abs()
     extra_features.append("rank_diff_abs")
 
-# Binary flag for best-of-5 (helps total games a lot)
+# Binary flag for best-of-5 
 if "best_of" in df.columns:
     df["is_bo5"] = (df["best_of"] >= 5).astype(int)
     extra_features.append("is_bo5")
@@ -112,11 +112,11 @@ feature_cols_gb = feature_cols + extra_features
 print(f"Total feature count for GB model (winner): {len(feature_cols_gb)}")
 print("Extra engineered features:", extra_features)
 
-# 5. Build X, y for winner model ---------------------------------------------
+# 5. Build X, y for winner model 
 X_cls = df[feature_cols_gb]
 y_cls = df["y"].astype(int)
 
-# 6. Train/test split for winner model ---------------------------------------
+# 6. Train/test split for winner model 
 if date_col is not None and date_col in df.columns:
     # Time-based split: older matches for train, newest ~20% for test
     df_sorted = df.sort_values(date_col)
@@ -138,7 +138,7 @@ else:
     )
     print(f"Random stratified split (winner): Train {X_train_cls.shape}, Test {X_test_cls.shape}")
 
-# 7. Define Gradient Boosting model (winner) ---------------------------------
+# 7. Define Gradient Boosting model (winner) 
 model_cls = HistGradientBoostingClassifier(
     learning_rate=0.05,
     max_depth=6,
@@ -149,11 +149,11 @@ model_cls = HistGradientBoostingClassifier(
     n_iter_no_change=20
 )
 
-# 8. Train winner model -------------------------------------------------------
+# 8. Train winner model 
 print("Training Gradient Boosting WINNER model...")
 model_cls.fit(X_train_cls, y_train_cls)
 
-# 9. Evaluate winner model ----------------------------------------------------
+# 9. Evaluate winner model 
 y_pred_cls = model_cls.predict(X_test_cls)
 try:
     y_proba_cls = model_cls.predict_proba(X_test_cls)[:, 1]
@@ -167,12 +167,12 @@ auc = roc_auc_score(y_test_cls, y_proba_cls)
 print(f"WINNER model - Accuracy (test): {acc:.3f}")
 print(f"WINNER model - ROC AUC (test): {auc:.3f}")
 
-# 10. Save winner model + feature list ---------------------------------------
+# 10. Save winner model + feature list 
 joblib.dump(model_cls, "model_gb.joblib")
 pd.Series(feature_cols_gb).to_csv("feature_columns_gb.csv", index=False, header=False)
 print("Saved model_gb.joblib and feature_columns_gb.csv")
 
-# 11. Train TOTAL GAMES model (regression) -----------------------------------
+# 11. Train TOTAL GAMES model (regression)
 if "total_games" not in df.columns:
     print("Column 'total_games' not found in matches_with_elo.csv; skipping total-games model.")
 else:
@@ -226,3 +226,4 @@ else:
         "feature_columns_games_gb.csv", index=False, header=False
     )
     print("Saved model_games.joblib and feature_columns_games_gb.csv")
+
