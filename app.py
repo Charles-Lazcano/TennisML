@@ -67,7 +67,7 @@ def load_players(path: str = "players.csv") -> pd.DataFrame:
         tmp["rank"] = np.arange(1, len(tmp) + 1)
         out = tmp.drop(columns=["elo_sort"])
 
-    # Surface Elo (fallback to global)
+    # Surface Elo 
     for surf, col in [
         ("Hard", elo_hard_col),
         ("Clay", elo_clay_col),
@@ -80,7 +80,6 @@ def load_players(path: str = "players.csv") -> pd.DataFrame:
         else:
             out[target] = out["elo_global"]
 
-    # Clean duplicates + sort
     out = (
         out.drop_duplicates("name", keep="first")
         .sort_values("rank")
@@ -153,7 +152,7 @@ def load_games_model(path: str = "model_games.joblib"):
         return None
 
 
-# ── Load data/models ─────────────────────────────────────────────────────────
+# ── Load data/models 
 try:
     players_df = load_players("players.csv")
     feature_cols = load_feature_columns("feature_columns_gb.csv")
@@ -168,7 +167,7 @@ games_bundle = load_games_model()
 games_feature_cols = load_feature_columns_games()  # can be None
 
 
-# ── Fast lookup ───────────────────────────────────────────────────────────────
+# Fast lookup 
 RANK_BY_NAME = dict(zip(players_df["name"], players_df["rank"]))
 ELO_GLOBAL_BY_NAME = dict(zip(players_df["name"], players_df["elo_global"]))
 ELO_SURFACE_BY_NAME = {
@@ -179,7 +178,7 @@ ELO_SURFACE_BY_NAME = {
 }
 
 
-# ── Label cleanup helpers ─────────────────────────────────────────────────────
+#Label cleanup helpers 
 def clean_name(name: str) -> str:
     """Remove any existing '#123 ' prefix."""
     return re.sub(r"^#?\d+\s+", "", str(name)).strip()
@@ -195,7 +194,7 @@ NAME_BY_LABEL = {make_label(n): n for n in players_df["name"]}
 LABELS = list(NAME_BY_LABEL.keys())
 
 
-# ── Feature Engineering ───────────────────────────────────────────────────────
+#  Feature Engineering 
 def build_feature_frame(p1: str, p2: str, surface: str, best_of: int) -> pd.DataFrame:
     """
     Build full feature frame for both winner + total-games models.
@@ -219,7 +218,7 @@ def build_feature_frame(p1: str, p2: str, surface: str, best_of: int) -> pd.Data
     elo1_s = float(ELO_SURFACE_BY_NAME.get(surface, {}).get(p1, elo1_g))
     elo2_s = float(ELO_SURFACE_BY_NAME.get(surface, {}).get(p2, elo2_g))
 
-    # Keep orientation consistent with rank_diff: diff = player2 - player1
+    # orientation consistent with rank_diff: diff = player2 - player1
     rank_diff = r2 - r1
     elo_diff = elo2_g - elo1_g
     elo_diff_surface = elo2_s - elo1_s
@@ -289,7 +288,7 @@ def predict_sets_probs(p1: str, p2: str, surface: str, best_of: int):
     return dict(zip(classes, proba))
 
 
-# ── UI ────────────────────────────────────────────────────────────────────────
+#  UI 
 st.title("🎾 Tennis Match Predictor")
 st.caption("Pick two players, choose the surface and match format, then click Predict.")
 
@@ -331,7 +330,7 @@ with a2:
 st.markdown("---")
 
 
-# ── Prediction ────────────────────────────────────────────────────────────────
+# Prediction 
 if do_predict:
     if p1 == p2:
         st.warning("Please choose two different players.")
@@ -345,7 +344,7 @@ if do_predict:
                 f"{winner} is favored • Win probability for {p1} vs {p2} on {surface} (best-of-{best_of}): {proba:.1%}"
             )
 
-            # Sets prediction (optional)
+            # Sets prediction 
             sets_probs = predict_sets_probs(p1, p2, surface, best_of)
             if sets_probs:
                 st.subheader("🧮 Sets prediction")
@@ -364,9 +363,8 @@ if do_predict:
                     st.progress(int(round(p4s * 100)), text="4 sets")
                     st.progress(int(round(p5s * 100)), text="5 sets")
 
-            # ── 🎯 Total Games + Over/Under helper (optional) ───────────────────
+            # 🎯 Total Games + Over/Under helper
             if games_bundle:
-                # Support both: plain model or {"model": ..., "mae": ...}
                 if isinstance(games_bundle, dict):
                     g_model = games_bundle.get("model")
                     mae = float(games_bundle.get("mae", 3.5))
@@ -412,7 +410,7 @@ if do_predict:
             st.error(f"Prediction failed: {e}")
 
 
-# ── Info ──────────────────────────────────────────────────────────────────────
+# Info 
 with st.expander("ℹ️ Why might I see a scikit-learn version warning?"):
     st.write(
         "You trained the model with one version of scikit-learn and are loading it with another. "
@@ -426,3 +424,4 @@ st.caption(
     "Total games: Gradient Boosting regressor using the same rich features, with an ±MAE band "
     "and Over/Under helper."
 )
+
