@@ -5,27 +5,7 @@
 # exports current Elo table for each player, joins Elo to matches, and retrains
 # a logistic regression model that uses: rank_diff, best_of, surface one-hots,
 # elo_diff (global), and elo_diff_surface (surface-aware).
-#
-# Inputs:
-#   - combined_matches_1968_2025.csv    (in project root OR ./data/)
-#
-# Outputs (default to project root, or use --outdir):
-#   - elo_current.csv
-#   - matches_with_elo.csv
-#   - feature_columns.csv
-#   - model_logreg.joblib
-#
-# Usage:
-#   python build_elo_and_retrain.py
-#   python build_elo_and_retrain.py --input data\combined_matches_1968_2025.csv
-#
-# Optional flags:
-#   --K 40                   Elo K-factor (default 40)
-#   --seed 42                Random seed
-#   --val_year_min 2015      Evaluate on modern era (>= year)
-#   --limit_year_min 2000    (Optional) Only process matches from this year onward (speed-up)
-#   --outdir data            Write artifacts into this folder instead of project root
-# ------------------------------------------------------------
+
 
 import argparse
 from pathlib import Path
@@ -122,7 +102,7 @@ def main():
 
     root = Path.cwd()
     data_dir = root / "data"
-    # Try provided path, then ./data/<name>, then ./data/combined_matches_1968_2025.csv
+    
     input_path = first_existing(
         Path(args.input),
         data_dir / args.input,
@@ -134,7 +114,7 @@ def main():
     print(f"[i] Loading matches from: {input_path}")
     df = pd.read_csv(input_path)
 
-    # Basic cleaning / normalization
+    # cleaning / normalization
     df["surface"] = df["surface"].apply(normalize_surface)
     df = df[df["surface"].isin(SURFACES)].copy()
 
@@ -144,7 +124,6 @@ def main():
     df = df.sort_values("tourney_date").reset_index(drop=True)
     df["year"] = df["tourney_date"].dt.year
 
-    # Optional speed-up: limit to recent years
     if args.limit_year_min is not None:
         before = len(df)
         df = df[df["year"] >= int(args.limit_year_min)].reset_index(drop=True)
@@ -185,7 +164,7 @@ def main():
     print(f"[✓] Saved: {elo_current_path}")
     print(f"[✓] Saved: {matches_with_elo_path}")
 
-    # Build balanced training matrix (winner vs swapped loser perspective)
+    # To Build balanced training matrix
     a = pd.DataFrame({
         "rank_diff": merged["rank_diff"],
         "elo_diff": merged["elo_diff"],
@@ -210,7 +189,7 @@ def main():
     })
     data = pd.concat([a, b], ignore_index=True).dropna()
 
-    # Feature list (order matters)
+    # Feature list 
     feature_columns = [
         "rank_diff",
         "elo_diff",
@@ -227,7 +206,7 @@ def main():
 
     # Train logistic regression
     print("[i] Training logistic regression with Elo features...")
-    # Use lbfgs; n_jobs only applies to certain solvers, so we omit it for compatibility.
+    
     model = LogisticRegression(max_iter=1000, solver="lbfgs")
     model.fit(X, y)
 
@@ -235,7 +214,6 @@ def main():
     joblib.dump(model, model_path)
     print(f"[✓] Saved: {model_path}")
 
-    # Modern-era quick eval (optional)
     modern_mask = merged["year"] >= int(args.val_year_min)
     if modern_mask.any():
         a_m = a[modern_mask]
@@ -257,3 +235,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
