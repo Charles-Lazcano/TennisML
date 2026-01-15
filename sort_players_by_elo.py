@@ -49,7 +49,7 @@ def read_elo(path: str) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Elo CSV '{path}' missing required columns: {missing}. Found: {list(df.columns)}")
 
-    # Ensure optional per-surface columns exist
+    #  per-surface columns exist
     for c in ["elo_hard", "elo_clay", "elo_grass", "elo_carpet"]:
         if c not in df.columns:
             df[c] = pd.NA
@@ -156,7 +156,7 @@ def main():
 
     df = elo.copy()
 
-    # 2) Attach match counts (if provided)
+    # 2) Attach match counts 
     if args.matches:
         try:
             counts = compute_counts(args.matches, args.recent_years)
@@ -210,3 +210,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
