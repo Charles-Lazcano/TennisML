@@ -40,7 +40,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.25, random_state=42, stratify=y)
 clf.fit(X_train, y_train)
 acc = accuracy_score(y_test, clf.predict(X_test))
-print(f"✅ Winner model accuracy: {acc:.3f}")
+print(f" Winner model accuracy: {acc:.3f}")
 
 # Save model
 joblib.dump(clf, ROOT / "model_logreg.joblib")
@@ -61,4 +61,5 @@ players = (players.dropna(subset=["name"])
            .first())
 players.to_csv(ROOT / "players.csv", index=False)
 
-print("✅ Exported: model_logreg.joblib, feature_columns.csv, players.csv")
+print(" Exported: model_logreg.joblib, feature_columns.csv, players.csv")
+
